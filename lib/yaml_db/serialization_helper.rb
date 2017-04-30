@@ -205,9 +205,12 @@ module YamlDb
         first_column, second_column = table_column_names(table)
 
         if [first_column, second_column].all? { |name| name =~ /_id$/ }
-          [Utils.quote_column(first_column), Utils.quote_column(second_column)]
+          [
+            Arel::Nodes::SqlLiteral.new(Utils.quote_column(first_column)),
+            Arel::Nodes::SqlLiteral.new(Utils.quote_column(second_column))
+          ]
         else
-          Utils.quote_column(first_column)
+          Arel::Nodes::SqlLiteral.new(Utils.quote_column(first_column))
         end
       end
     end
